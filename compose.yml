@@ -25,6 +25,9 @@ services:
     build:
       context: ./samba
       dockerfile: Dockerfile
+      args:
+        - SAMBA_USER=${SAMBA_USER}
+        - SAMBA_PW=${SAMBA_PW}
     restart: unless-stopped
     ports:
       - "445:445"
@@ -32,11 +35,4 @@ services:
       - ./samba/config:/etc/samba:ro
       - ./data:/data
       - ./samba/run:/run/bin:ro
-    secrets:
-      - source: samba-secrets
-        target: /run/secrets
     command: /bin/sh -c "/run/bin/entrypoint.sh"
-
-secrets:
-  samba-secrets:
-    file: ./samba/secrets
